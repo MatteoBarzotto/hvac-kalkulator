@@ -10,228 +10,283 @@
 <title>HVAC Kalkulator — SH &amp; SC</title>
 <link rel="manifest" href="manifest.json">
 <style>
-  :root {
-    --bg: #0f172a;
-    --bg2: #1e293b;
-    --bg3: #334155;
-    --border: #334155;
-    --border2: #475569;
-    --text: #f1f5f9;
-    --text2: #94a3b8;
-    --text3: #64748b;
-    --blue: #38bdf8;
-    --blue2: #0ea5e9;
-    --green: #4ade80;
-    --green2: #16a34a;
-    --red: #f87171;
-    --red2: #dc2626;
-    --yellow: #fbbf24;
-    --yellow2: #d97706;
-    --accent: #38bdf8;
-    --radius: 12px;
-    --radius-sm: 8px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, 'SF Pro Display', 'Segoe UI', sans-serif; }
+:root {
+  --bg: #0f172a;
+  --bg2: #1e293b;
+  --bg3: #334155;
+  --border: #334155;
+  --border2: #475569;
+  --text: #f1f5f9;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --blue: #38bdf8;
+  --blue2: #0ea5e9;
+  --green: #4ade80;
+  --red: #f87171;
+  --yellow: #fbbf24;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, 'SF Pro Display', 'Segoe UI', sans-serif; }
+body { display: flex; flex-direction: column; min-height: 100vh; padding-bottom: env(safe-area-inset-bottom); }
 
-  body { display: flex; flex-direction: column; min-height: 100vh; padding-bottom: env(safe-area-inset-bottom); }
+/* HEADER */
+.header {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 20px 12px;
+  display: flex; align-items: center; gap: 12px;
+  position: sticky; top: 0; z-index: 50;
+}
+.header-icon {
+  width: 38px; height: 38px;
+  background: linear-gradient(135deg, #1d4ed8, #0284c7);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.header-text h1 { font-size: 18px; font-weight: 700; }
+.header-text p { font-size: 11px; color: var(--text3); letter-spacing: 0.5px; margin-top: 1px; }
 
-  /* HEADER */
-  .header {
-    background: var(--bg2);
-    border-bottom: 1px solid var(--border);
-    padding: 16px 20px 12px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    position: sticky;
-    top: 0;
-    z-index: 50;
-  }
-  .header-icon {
-    width: 38px; height: 38px;
-    background: linear-gradient(135deg, #1d4ed8, #0284c7);
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px; flex-shrink: 0;
-  }
-  .header-text h1 { font-size: 18px; font-weight: 700; letter-spacing: 0.3px; }
-  .header-text p { font-size: 11px; color: var(--text3); letter-spacing: 0.5px; margin-top: 1px; }
+/* SCROLL */
+.scroll { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
 
-  /* SCROLL AREA */
-  .scroll { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+/* INSTRUKCJA PRZYCISK */
+.instr-btn {
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(135deg, #1e3a5f, #162032);
+  border: 1.5px solid #1d4ed8;
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  cursor: pointer; width: 100%;
+  text-align: left;
+  transition: opacity 0.15s;
+}
+.instr-btn:active { opacity: 0.8; }
+.instr-btn-left { display: flex; align-items: center; gap: 14px; }
+.instr-btn-icon {
+  width: 42px; height: 42px;
+  background: rgba(56,189,248,0.15);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; flex-shrink: 0;
+}
+.instr-btn-title { font-size: 15px; font-weight: 700; color: var(--blue); margin-bottom: 2px; }
+.instr-btn-sub { font-size: 12px; color: var(--text3); }
+.instr-btn-arrow { font-size: 20px; color: var(--blue2); }
 
-  /* CARDS */
-  .card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
-  .card-header {
-    padding: 10px 16px;
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: space-between;
-    background: rgba(255,255,255,0.02);
-  }
-  .card-title {
-    font-size: 11px; font-weight: 600;
-    letter-spacing: 1.5px; text-transform: uppercase;
-    color: var(--text2);
-  }
-  .card-tag {
-    font-size: 10px; letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-weight: 600;
-  }
-  .tag-blue { background: rgba(56,189,248,0.12); color: var(--blue); }
-  .tag-red  { background: rgba(248,113,113,0.12); color: var(--red); }
+/* MODAL OVERLAY */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.7);
+  align-items: flex-end;
+  justify-content: center;
+}
+.modal-overlay.open { display: flex; }
 
-  .card-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
+.modal {
+  background: var(--bg2);
+  border-radius: 20px 20px 0 0;
+  border-top: 1px solid var(--border2);
+  width: 100%; max-width: 560px;
+  max-height: 88vh;
+  display: flex; flex-direction: column;
+  animation: slideUp 0.25s ease;
+}
+@keyframes slideUp {
+  from { transform: translateY(60px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+.modal-handle {
+  width: 40px; height: 4px;
+  background: var(--border2);
+  border-radius: 2px;
+  margin: 12px auto 0;
+  flex-shrink: 0;
+}
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px 10px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.modal-title { font-size: 17px; font-weight: 700; }
+.modal-close {
+  width: 32px; height: 32px;
+  background: var(--bg3);
+  border: none; border-radius: 50%;
+  color: var(--text2); font-size: 18px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.modal-body { overflow-y: auto; padding: 16px 20px 30px; flex: 1; }
 
-  /* VALVE SELECTOR */
-  .valve-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .valve-btn {
-    padding: 10px 8px;
-    border: 1.5px solid var(--border2);
-    border-radius: var(--radius-sm);
-    background: transparent;
-    color: var(--text2);
-    font-size: 13px; font-weight: 600;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.15s;
-    line-height: 1.3;
-  }
-  .valve-btn.active {
-    border-color: var(--blue2);
-    background: rgba(14,165,233,0.12);
-    color: var(--blue);
-  }
-  .valve-btn span { display: block; font-size: 10px; font-weight: 400; color: var(--text3); margin-top: 2px; letter-spacing: 0.5px; }
+/* TABS */
+.tabs { display: flex; gap: 6px; margin-bottom: 18px; }
+.tab-btn {
+  flex: 1; padding: 9px 6px;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text3); font-size: 12px; font-weight: 600;
+  cursor: pointer; letter-spacing: 0.5px;
+  transition: all 0.15s;
+}
+.tab-btn.active {
+  border-color: var(--blue2);
+  background: rgba(14,165,233,0.1);
+  color: var(--blue);
+}
 
-  /* FIELDS */
-  .field { display: flex; flex-direction: column; gap: 6px; }
-  .field label { font-size: 11px; color: var(--text3); letter-spacing: 0.8px; font-weight: 500; }
-  .field-row { position: relative; }
-  .field input {
-    width: 100%;
-    background: var(--bg);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    color: var(--text);
-    padding: 13px 48px 13px 14px;
-    font-size: 20px;
-    font-variant-numeric: tabular-nums;
-    transition: border-color 0.15s;
-    -webkit-appearance: none;
-  }
-  .field input:focus { outline: none; border-color: var(--blue2); }
-  .field input::placeholder { color: var(--text3); font-size: 16px; }
-  .field-unit {
-    position: absolute; right: 14px; top: 50%;
-    transform: translateY(-50%);
-    font-size: 13px; color: var(--text3);
-    pointer-events: none;
-    font-weight: 500;
-  }
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
 
-  /* SAT TEMP DISPLAY */
-  .sat-row {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 10px 14px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .sat-label { font-size: 11px; color: var(--text3); }
-  .sat-val { font-size: 22px; font-weight: 600; color: var(--blue); font-variant-numeric: tabular-nums; }
-  .sat-val span { font-size: 13px; color: var(--text3); margin-left: 2px; }
+/* INSTRUKCJA TREŚĆ */
+.section-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--blue2);
+  margin-bottom: 8px; margin-top: 16px;
+}
+.section-label:first-child { margin-top: 0; }
 
-  /* RESULTS */
-  .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .result-card {
-    background: var(--bg2);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px 14px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    transition: border-color 0.3s;
-  }
-  .result-card::after {
-    content: '';
-    position: absolute; bottom: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--result-color, var(--border));
-    transition: background 0.3s;
-  }
-  .result-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text3); margin-bottom: 8px; }
-  .result-val {
-    font-size: 44px; font-weight: 700; line-height: 1;
-    color: var(--result-color, var(--text3));
-    font-variant-numeric: tabular-nums;
-    transition: color 0.3s;
-    margin-bottom: 4px;
-  }
-  .result-unit { font-size: 14px; color: var(--text3); margin-bottom: 10px; }
-  .result-badge {
-    font-size: 10px; font-weight: 700; letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 3px 10px; border-radius: 4px;
-    background: rgba(255,255,255,0.06);
-    color: var(--result-color, var(--text3));
-    display: inline-block;
-  }
-  .result-target { font-size: 10px; color: var(--text3); margin-top: 6px; }
+/* KROKI */
+.step {
+  display: flex; gap: 12px; align-items: flex-start;
+  margin-bottom: 12px;
+}
+.step-num {
+  width: 26px; height: 26px; flex-shrink: 0;
+  background: rgba(14,165,233,0.15);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: var(--blue);
+}
+.step-content { flex: 1; }
+.step-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+.step-desc { font-size: 12px; color: var(--text2); line-height: 1.6; }
+.step-tip {
+  margin-top: 5px;
+  background: rgba(251,191,36,0.08);
+  border-left: 3px solid var(--yellow);
+  border-radius: 0 4px 4px 0;
+  padding: 6px 10px;
+  font-size: 11px; color: var(--yellow); line-height: 1.5;
+}
+.step-warn {
+  margin-top: 5px;
+  background: rgba(248,113,113,0.08);
+  border-left: 3px solid var(--red);
+  border-radius: 0 4px 4px 0;
+  padding: 6px 10px;
+  font-size: 11px; color: var(--red); line-height: 1.5;
+}
+.step-ok {
+  margin-top: 5px;
+  background: rgba(74,222,128,0.08);
+  border-left: 3px solid var(--green);
+  border-radius: 0 4px 4px 0;
+  padding: 6px 10px;
+  font-size: 11px; color: var(--green); line-height: 1.5;
+}
 
-  /* DIAGNOSIS */
-  .diag-list { display: flex; flex-direction: column; gap: 10px; }
-  .diag-item {
-    display: flex; gap: 10px; align-items: flex-start;
-    background: var(--bg);
-    border-radius: var(--radius-sm);
-    padding: 10px 12px;
-    border-left: 3px solid var(--diag-color, var(--border));
-  }
-  .diag-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
-  .diag-text { font-size: 13px; color: var(--text2); line-height: 1.5; }
-  .diag-empty { font-size: 13px; color: var(--text3); text-align: center; padding: 10px 0; }
+.divider { height: 1px; background: var(--border); margin: 14px 0; }
 
-  /* WZORY */
-  .formula-box {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 12px 14px;
-  }
-  .formula-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
-  .formula-row:last-child { margin-bottom: 0; }
-  .formula-name { font-size: 12px; color: var(--text3); }
-  .formula-eq { font-size: 13px; color: var(--text2); font-family: 'SF Mono', 'Fira Mono', monospace; }
+.info-box {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+.info-box-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.info-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.info-row:last-child { margin-bottom: 0; }
+.info-key { font-size: 12px; color: var(--text3); }
+.info-val { font-size: 12px; font-weight: 600; color: var(--text2); }
+.info-val.good { color: var(--green); }
+.info-val.warn { color: var(--yellow); }
+.info-val.bad  { color: var(--red); }
 
-  /* RESET BTN */
-  .reset-btn {
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    color: var(--text3);
-    padding: 12px;
-    font-size: 13px; letter-spacing: 1px; text-transform: uppercase;
-    cursor: pointer; width: 100%;
-    transition: all 0.15s;
-    font-weight: 600;
-  }
-  .reset-btn:active { background: var(--bg2); color: var(--text2); }
+/* KARTY APPKI */
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.card-header {
+  padding: 10px 16px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(255,255,255,0.02);
+}
+.card-title { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text2); }
+.card-tag { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; font-weight: 600; }
+.tag-blue { background: rgba(56,189,248,0.12); color: var(--blue); }
+.tag-red  { background: rgba(248,113,113,0.12); color: var(--red); }
+.card-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
 
-  .footer { font-size: 10px; color: var(--text3); text-align: center; padding: 4px 0 8px; letter-spacing: 0.5px; }
+.valve-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.valve-btn {
+  padding: 10px 8px; border: 1.5px solid var(--border2);
+  border-radius: var(--radius-sm); background: transparent;
+  color: var(--text2); font-size: 13px; font-weight: 600;
+  cursor: pointer; text-align: center; transition: all 0.15s; line-height: 1.3;
+}
+.valve-btn.active { border-color: var(--blue2); background: rgba(14,165,233,0.12); color: var(--blue); }
+.valve-btn span { display: block; font-size: 10px; font-weight: 400; color: var(--text3); margin-top: 2px; }
 
-  input[type=number]::-webkit-inner-spin-button,
-  input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-size: 11px; color: var(--text3); letter-spacing: 0.8px; font-weight: 500; }
+.field-row { position: relative; }
+.field input {
+  width: 100%; background: var(--bg); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text);
+  padding: 13px 48px 13px 14px; font-size: 20px;
+  font-variant-numeric: tabular-nums; transition: border-color 0.15s; -webkit-appearance: none;
+}
+.field input:focus { outline: none; border-color: var(--blue2); }
+.field input::placeholder { color: var(--text3); font-size: 16px; }
+.field-unit { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--text3); pointer-events: none; font-weight: 500; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.sat-row {
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;
+}
+.sat-label { font-size: 11px; color: var(--text3); }
+.sat-val { font-size: 22px; font-weight: 600; color: var(--blue); font-variant-numeric: tabular-nums; }
+.sat-val span { font-size: 13px; color: var(--text3); margin-left: 2px; }
+
+.results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.result-card {
+  background: var(--bg2); border: 1.5px solid var(--border);
+  border-radius: var(--radius); padding: 16px 14px; text-align: center;
+  position: relative; overflow: hidden; transition: border-color 0.3s;
+}
+.result-card::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+  background: var(--result-color, var(--border)); transition: background 0.3s;
+}
+.result-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text3); margin-bottom: 8px; }
+.result-val { font-size: 44px; font-weight: 700; line-height: 1; color: var(--result-color, var(--text3)); font-variant-numeric: tabular-nums; transition: color 0.3s; margin-bottom: 4px; }
+.result-unit { font-size: 14px; color: var(--text3); margin-bottom: 10px; }
+.result-badge { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 10px; border-radius: 4px; background: rgba(255,255,255,0.06); color: var(--result-color, var(--text3)); display: inline-block; }
+.result-target { font-size: 10px; color: var(--text3); margin-top: 6px; }
+
+.diag-list { display: flex; flex-direction: column; gap: 10px; }
+.diag-item { display: flex; gap: 10px; align-items: flex-start; background: var(--bg); border-radius: var(--radius-sm); padding: 10px 12px; border-left: 3px solid var(--diag-color, var(--border)); }
+.diag-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.diag-text { font-size: 13px; color: var(--text2); line-height: 1.5; }
+.diag-empty { font-size: 13px; color: var(--text3); text-align: center; padding: 10px 0; }
+
+.formula-box { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; }
+.formula-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.formula-row:last-child { margin-bottom: 0; }
+.formula-name { font-size: 12px; color: var(--text3); }
+.formula-eq { font-size: 13px; color: var(--text2); font-family: 'SF Mono', 'Fira Mono', monospace; }
+
+.reset-btn { background: transparent; border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text3); padding: 12px; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; width: 100%; transition: all 0.15s; font-weight: 600; }
+.reset-btn:active { background: var(--bg2); color: var(--text2); }
+.footer { font-size: 10px; color: var(--text3); text-align: center; padding: 4px 0 8px; letter-spacing: 0.5px; }
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
 </style>
 </head>
 <body>
@@ -246,27 +301,35 @@
 
 <div class="scroll">
 
+  <!-- PRZYCISK INSTRUKCJI -->
+  <button class="instr-btn" onclick="openModal()">
+    <div class="instr-btn-left">
+      <div class="instr-btn-icon">📋</div>
+      <div>
+        <div class="instr-btn-title">Instrukcja jak zmierzyć</div>
+        <div class="instr-btn-sub">Procedura przy agregacie + obsługa aplikacji</div>
+      </div>
+    </div>
+    <div class="instr-btn-arrow">›</div>
+  </button>
+
   <!-- TYP ZAWORU -->
   <div class="card">
-    <div class="card-header">
-      <span class="card-title">Typ zaworu</span>
-    </div>
+    <div class="card-header"><span class="card-title">Typ zaworu</span></div>
     <div class="card-body">
       <div class="valve-selector">
         <button class="valve-btn active" id="btn-txv" onclick="setValve('txv')">
-          TXV
-          <span>Termostatyczny</span>
+          TXV<span>Termostatyczny</span>
         </button>
         <button class="valve-btn" id="btn-fixed" onclick="setValve('fixed')">
-          Stały otwór
-          <span>Tłok / kapilara</span>
+          Stały otwór<span>Tłok / kapilara</span>
         </button>
       </div>
-      <div id="valve-hint" style="font-size:12px; color:var(--text3); line-height:1.5; padding: 2px 0;"></div>
+      <div id="valve-hint" style="font-size:12px;color:var(--text3);line-height:1.5;padding:2px 0;"></div>
     </div>
   </div>
 
-  <!-- STRONA SSANIA (SH) -->
+  <!-- SSANIE -->
   <div class="card">
     <div class="card-header">
       <span class="card-title">Strona ssania</span>
@@ -291,14 +354,12 @@
       </div>
       <div class="sat-row">
         <span class="sat-label">Przegrzanie (SH)</span>
-        <div>
-          <span class="sat-val" id="sh-preview">—<span></span></span>
-        </div>
+        <span class="sat-val" id="sh-preview">—<span></span></span>
       </div>
     </div>
   </div>
 
-  <!-- STRONA CIECZOWA (SC) -->
+  <!-- CIECZ -->
   <div class="card">
     <div class="card-header">
       <span class="card-title">Strona cieczowa</span>
@@ -323,9 +384,7 @@
       </div>
       <div class="sat-row">
         <span class="sat-label">Dochłodzenie (SC)</span>
-        <div>
-          <span class="sat-val" id="sc-preview">—<span></span></span>
-        </div>
+        <span class="sat-val" id="sc-preview">—<span></span></span>
       </div>
     </div>
   </div>
@@ -350,9 +409,7 @@
 
   <!-- DIAGNOZA -->
   <div class="card">
-    <div class="card-header">
-      <span class="card-title">Diagnoza układu</span>
-    </div>
+    <div class="card-header"><span class="card-title">Diagnoza układu</span></div>
     <div class="card-body">
       <div class="diag-list" id="diag-list">
         <p class="diag-empty">Wprowadź wartości aby zobaczyć diagnozę.</p>
@@ -362,9 +419,7 @@
 
   <!-- WZORY -->
   <div class="card">
-    <div class="card-header">
-      <span class="card-title">Wzory</span>
-    </div>
+    <div class="card-header"><span class="card-title">Wzory</span></div>
     <div class="card-body">
       <div class="formula-box">
         <div class="formula-row">
@@ -380,21 +435,217 @@
   </div>
 
   <button class="reset-btn" onclick="resetAll()">Wyczyść wszystkie pola</button>
-  <p class="footer">KINA Instalacje · R32 / R410A · v1.0</p>
+  <p class="footer">KINA Instalacje · R32 / R410A · v1.1</p>
+</div>
+
+<!-- MODAL INSTRUKCJA -->
+<div class="modal-overlay" id="modal-overlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <span class="modal-title">📋 Instrukcja pomiarów</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('procedura', this)">Procedura przy agregacie</button>
+        <button class="tab-btn" onclick="switchTab('aplikacja', this)">Obsługa aplikacji</button>
+      </div>
+
+      <!-- TAB: PROCEDURA -->
+      <div class="tab-panel active" id="tab-procedura">
+
+        <div class="section-label">Przygotowanie</div>
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Uruchom układ i odczekaj</div>
+            <div class="step-desc">Włącz klimatyzator i poczekaj min. <strong>15 minut</strong> — układ musi osiągnąć stan ustalony. Pomiary podczas rozruchu są fałszywe.</div>
+            <div class="step-tip">💡 Im bardziej stabilna praca, tym dokładniejszy pomiar. Przy gorących dniach poczekaj nawet 20 min.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Przygotuj narzędzia</div>
+            <div class="step-desc">Potrzebujesz: <strong>manometr kolektora</strong> (manifold gauge) + <strong>termometr zaciskowy</strong> (kleszcze termopary) na przewód miedziany.</div>
+            <div class="step-warn">⚠ Zakładaj okulary ochronne i rękawice. Czynnik pod ciśnieniem może poparzyć skórę.</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="section-label">Pomiar przegrzania (SH) — strona niska</div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title">Podłącz manometr do zaworu ssawnego</div>
+            <div class="step-desc">Niebieski wąż manometru → zawór serwisowy na grubej izolowanej rurze ssawnej (przy sprężarce agregatu zewnętrznego).</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <div class="step-title">Odczytaj temperaturę nasycenia ze ssania</div>
+            <div class="step-desc">Na manometrze cyfrowym (lub skali PT) odczytaj <strong>temperaturę nasycenia</strong> odpowiadającą zmierzonemu ciśnieniu dla R32 lub R410A. Wpisz ją w aplikacji jako „Temp. nasycenia (ssanie)".</div>
+            <div class="step-tip">💡 Manometry cyfrowe (np. Testo, Refco) wyświetlają temperaturę nasycenia automatycznie — wybierz czynnik R32 lub R410A.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <div class="step-title">Zamontuj kleszcze termopary na rurze ssawnej</div>
+            <div class="step-desc">Zamocuj termometr zaciskowy na rurze ssawnej <strong>4–6 cm od zaworu serwisowego</strong>. Owij rurę folią lub otuliną dla dokładniejszego odczytu.</div>
+            <div class="step-warn">⚠ Nie mierz na izolacji — tylko bezpośrednio na miedzianej rurze!</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-content">
+            <div class="step-title">Wpisz temperaturę linii ssawnej</div>
+            <div class="step-desc">Odczekaj aż wynik się ustabilizuje (ok. 1–2 min), wpisz odczyt w aplikacji jako „Temp. linii ssawnej".</div>
+            <div class="step-ok">✓ Aplikacja obliczy SH automatycznie.</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="section-label">Pomiar dochłodzenia (SC) — strona wysoka</div>
+
+        <div class="step">
+          <div class="step-num">7</div>
+          <div class="step-content">
+            <div class="step-title">Podłącz manometr do zaworu cieczowego</div>
+            <div class="step-desc">Czerwony wąż manometru → zawór serwisowy na cienkiej rurze cieczowej (wyjście ze skraplacza, przed zaworem rozprężnym).</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">8</div>
+          <div class="step-content">
+            <div class="step-title">Odczytaj temperaturę nasycenia ze skraplania</div>
+            <div class="step-desc">Analogicznie jak w kroku 4 — odczytaj <strong>temperaturę nasycenia po stronie wysokiej</strong> i wpisz jako „Temp. nasycenia (skraplanie)".</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">9</div>
+          <div class="step-content">
+            <div class="step-title">Zmierz temperaturę linii cieczowej</div>
+            <div class="step-desc">Zamocuj kleszcze na rurze cieczowej blisko skraplacza (przed zaworem rozprężnym). Wpisz odczyt jako „Temp. linii cieczowej".</div>
+            <div class="step-ok">✓ Aplikacja obliczy SC i pokaże diagnozę.</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="section-label">Zakresy normy</div>
+
+        <div class="info-box">
+          <div class="info-box-title">TXV — zawór termostatyczny</div>
+          <div class="info-row"><span class="info-key">Przegrzanie SH</span><span class="info-val good">5 – 8 °C</span></div>
+          <div class="info-row"><span class="info-key">Dochłodzenie SC</span><span class="info-val good">5 – 10 °C</span></div>
+          <div class="info-row"><span class="info-key">Metoda ładowania</span><span class="info-val">przez SC</span></div>
+        </div>
+        <div class="info-box">
+          <div class="info-box-title">Stały otwór / tłok / kapilara</div>
+          <div class="info-row"><span class="info-key">Przegrzanie SH</span><span class="info-val good">8 – 12 °C</span></div>
+          <div class="info-row"><span class="info-key">Dochłodzenie SC</span><span class="info-val good">5 – 10 °C</span></div>
+          <div class="info-row"><span class="info-key">Metoda ładowania</span><span class="info-val">przez SH</span></div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="section-label">Szybka interpretacja</div>
+        <div class="info-box">
+          <div class="info-row"><span class="info-key">Wysokie SH + niskie SC</span><span class="info-val bad">niedobór czynnika</span></div>
+          <div class="info-row"><span class="info-key">Niskie SH + wysokie SC</span><span class="info-val bad">nadmiar czynnika</span></div>
+          <div class="info-row"><span class="info-key">SH ujemne</span><span class="info-val bad">zalewanie sprężarki!</span></div>
+          <div class="info-row"><span class="info-key">SH > 20 °C</span><span class="info-val warn">przegrzanie sprężarki</span></div>
+          <div class="info-row"><span class="info-key">Wysokie SC</span><span class="info-val warn">zwężka / filtr osuszacz</span></div>
+          <div class="info-row"><span class="info-key">SH i SC w normie</span><span class="info-val good">układ OK ✓</span></div>
+        </div>
+
+      </div>
+
+      <!-- TAB: APLIKACJA -->
+      <div class="tab-panel" id="tab-aplikacja">
+
+        <div class="section-label">Jak używać kalkulatora</div>
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Wybierz typ zaworu</div>
+            <div class="step-desc">Zaznacz <strong>TXV</strong> lub <strong>Stały otwór</strong> — aplikacja dostosuje zakresy docelowe i podpowie metodę ładowania.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Wpisz dane ssania (SH)</div>
+            <div class="step-desc">W sekcji „Strona ssania" wpisz temperaturę nasycenia z manometru i temperaturę linii ssawnej z termometru zaciskowego.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title">Wpisz dane cieczowe (SC)</div>
+            <div class="step-desc">W sekcji „Strona cieczowa" wpisz temperaturę nasycenia skraplania i temperaturę linii cieczowej.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <div class="step-title">Odczytaj wyniki</div>
+            <div class="step-desc">Wyniki SH i SC pojawiają się na bieżąco w kolorach:<br>
+              <strong style="color:var(--green)">Zielony</strong> = w normie &nbsp;
+              <strong style="color:var(--yellow)">Żółty</strong> = odchylenie &nbsp;
+              <strong style="color:var(--red)">Czerwony</strong> = problem
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <div class="step-title">Sprawdź diagnozę</div>
+            <div class="step-desc">Sekcja „Diagnoza układu" podpowiada prawdopodobną przyczynę odchyleń na podstawie kombinacji SH i SC.</div>
+            <div class="step-tip">💡 Pełna diagnoza wymaga obu wartości — SH i SC jednocześnie.</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="section-label">Ważne zasady</div>
+
+        <div class="info-box">
+          <div class="info-row"><span class="info-key">Min. czas pracy przed pomiarem</span><span class="info-val">15 minut</span></div>
+          <div class="info-row"><span class="info-key">Miejsce montażu termopary</span><span class="info-val">4–6 cm od zaworu</span></div>
+          <div class="info-row"><span class="info-key">Powierzchnia pomiaru</span><span class="info-val">gołą miedź (bez izolacji)</span></div>
+          <div class="info-row"><span class="info-key">Temperatura nasycenia</span><span class="info-val">z manometru cyfrowego</span></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
 var valveType = 'txv';
-
 var SH_TARGET = {
-  txv:   { min: 5, max: 8,  label: 'Cel TXV: 5 – 8 °C' },
+  txv:   { min: 5,  max: 8,  label: 'Cel TXV: 5 – 8 °C' },
   fixed: { min: 8, max: 12, label: 'Cel stały otwór: 8 – 12 °C' }
 };
 var SC_TARGET = {
   txv:   { min: 5, max: 10, label: 'Cel TXV: 5 – 10 °C' },
   fixed: { min: 5, max: 10, label: 'Cel: 5 – 10 °C' }
 };
-
 var VALVE_HINTS = {
   txv:   'TXV: ładuj układ przez dochłodzenie (SC). Przegrzanie służy do weryfikacji pracy zaworu.',
   fixed: 'Stały otwór: ładuj układ przez przegrzanie (SH). Dochłodzenie służy jako kontrola.'
@@ -410,16 +661,16 @@ function setValve(type) {
 
 function getVal(id) {
   var v = document.getElementById(id).value;
-  if (v === '' || v === null) return null;
-  return parseFloat(v);
+  return (v === '' || v === null) ? null : parseFloat(v);
 }
 
-function colorForValue(val, min, max) {
+function colorFor(val, min, max) {
   if (val === null) return null;
+  if (val < 0)          return 'var(--red)';
   if (val < min * 0.5)  return 'var(--red)';
   if (val < min)        return 'var(--yellow)';
   if (val <= max)       return 'var(--green)';
-  if (val <= max * 1.5) return 'var(--yellow)';
+  if (val <= max * 1.8) return 'var(--yellow)';
   return 'var(--red)';
 }
 
@@ -442,93 +693,79 @@ function calc() {
   var sh = (tSatSuc !== null && tSuc !== null) ? tSuc - tSatSuc : null;
   var sc = (tSatLiq !== null && tLiq !== null) ? tSatLiq - tLiq : null;
 
-  var shTarget = SH_TARGET[valveType];
-  var scTarget = SC_TARGET[valveType];
+  var shT = SH_TARGET[valveType];
+  var scT = SC_TARGET[valveType];
 
-  // Preview w polach
   if (sh !== null) {
     document.getElementById('sh-preview').innerHTML = sh.toFixed(1) + '<span> °C</span>';
-    document.getElementById('sh-preview').style.color = colorForValue(sh, shTarget.min, shTarget.max);
+    document.getElementById('sh-preview').style.color = colorFor(sh, shT.min, shT.max) || 'var(--blue)';
   } else {
     document.getElementById('sh-preview').innerHTML = '—<span></span>';
     document.getElementById('sh-preview').style.color = 'var(--blue)';
   }
   if (sc !== null) {
     document.getElementById('sc-preview').innerHTML = sc.toFixed(1) + '<span> °C</span>';
-    document.getElementById('sc-preview').style.color = colorForValue(sc, scTarget.min, scTarget.max);
+    document.getElementById('sc-preview').style.color = colorFor(sc, scT.min, scT.max) || 'var(--blue)';
   } else {
     document.getElementById('sc-preview').innerHTML = '—<span></span>';
     document.getElementById('sc-preview').style.color = 'var(--blue)';
   }
 
-  // Karty wyników SH
-  var shColor = sh !== null ? colorForValue(sh, shTarget.min, shTarget.max) : 'var(--text3)';
+  var shColor = sh !== null ? colorFor(sh, shT.min, shT.max) : 'var(--text3)';
   document.getElementById('card-sh').style.setProperty('--result-color', shColor);
   document.getElementById('sh-val').textContent = sh !== null ? sh.toFixed(1) : '—';
-  document.getElementById('sh-badge').textContent = badgeText(sh, shTarget.min, shTarget.max, 'sh');
-  document.getElementById('sh-target').textContent = shTarget.label;
+  document.getElementById('sh-badge').textContent = badgeText(sh, shT.min, shT.max, 'sh');
+  document.getElementById('sh-target').textContent = shT.label;
 
-  // Karty wyników SC
-  var scColor = sc !== null ? colorForValue(sc, scTarget.min, scTarget.max) : 'var(--text3)';
+  var scColor = sc !== null ? colorFor(sc, scT.min, scT.max) : 'var(--text3)';
   document.getElementById('card-sc').style.setProperty('--result-color', scColor);
   document.getElementById('sc-val').textContent = sc !== null ? sc.toFixed(1) : '—';
-  document.getElementById('sc-badge').textContent = badgeText(sc, scTarget.min, scTarget.max, 'sc');
-  document.getElementById('sc-target').textContent = scTarget.label;
+  document.getElementById('sc-badge').textContent = badgeText(sc, scT.min, scT.max, 'sc');
+  document.getElementById('sc-target').textContent = scT.label;
 
   renderDiag(sh, sc);
 }
 
 function renderDiag(sh, sc) {
   var list = document.getElementById('diag-list');
-
   if (sh === null && sc === null) {
     list.innerHTML = '<p class="diag-empty">Wprowadź wartości aby zobaczyć diagnozę.</p>';
     return;
   }
-
   var items = [];
   var shT = SH_TARGET[valveType];
   var scT = SC_TARGET[valveType];
 
   if (sh !== null && sc !== null) {
-    if (sh > shT.max && sc < scT.min) {
-      items.push({ color: 'var(--red)', icon: '⚠', text: 'Wysokie SH + niskie SC → prawdopodobny niedobór czynnika chłodniczego. Sprawdź szczelność układu przed uzupełnieniem.' });
-    } else if (sh < shT.min && sc > scT.max) {
-      items.push({ color: 'var(--red)', icon: '⚠', text: 'Niskie SH + wysokie SC → prawdopodobny nadmiar czynnika chłodniczego. Konieczne odciągnięcie.' });
-    } else if (sh > shT.max && sc > scT.max) {
-      items.push({ color: 'var(--yellow)', icon: '!', text: 'Wysokie SH + wysokie SC → sprawdź przepływ powietrza przez parownik (filtr, wentylator). Możliwa zwężka w przewodzie.' });
-    } else if (sh < shT.min && sc < scT.min) {
-      items.push({ color: 'var(--yellow)', icon: '!', text: 'Niskie SH + niskie SC → możliwy problem z zaworem TXV lub stałym otworem. Sprawdź czujnik TXV.' });
-    } else if (sh >= shT.min && sh <= shT.max && sc >= scT.min && sc <= scT.max) {
-      items.push({ color: 'var(--green)', icon: '✓', text: 'Parametry w normie. Układ pracuje prawidłowo.' });
-    }
+    if (sh > shT.max && sc < scT.min)
+      items.push({ c: 'var(--red)', i: '⚠', t: 'Wysokie SH + niskie SC → prawdopodobny niedobór czynnika chłodniczego. Sprawdź szczelność układu przed uzupełnieniem.' });
+    else if (sh < shT.min && sc > scT.max)
+      items.push({ c: 'var(--red)', i: '⚠', t: 'Niskie SH + wysokie SC → prawdopodobny nadmiar czynnika chłodniczego. Konieczne odciągnięcie.' });
+    else if (sh > shT.max && sc > scT.max)
+      items.push({ c: 'var(--yellow)', i: '!', t: 'Wysokie SH + wysokie SC → sprawdź przepływ powietrza przez parownik (filtr, wentylator). Możliwa zwężka w przewodzie.' });
+    else if (sh < shT.min && sc < scT.min)
+      items.push({ c: 'var(--yellow)', i: '!', t: 'Niskie SH + niskie SC → możliwy problem z zaworem TXV lub stałym otworem. Sprawdź czujnik TXV.' });
+    else if (sh >= shT.min && sh <= shT.max && sc >= scT.min && sc <= scT.max)
+      items.push({ c: 'var(--green)', i: '✓', t: 'Parametry w normie. Układ pracuje prawidłowo.' });
   }
 
   if (sh !== null) {
-    if (sh < 0) items.push({ color: 'var(--red)', icon: '!', text: 'SH ujemne — ciecz dociera do sprężarki! Zatrzymaj układ natychmiast.' });
-    else if (sh < shT.min && !(sh < shT.min && sc !== null && sc > scT.max)) {
-      items.push({ color: 'var(--yellow)', icon: '!', text: 'Niskie przegrzanie — ryzyko zalewania sprężarki cieczą. Sprawdź ustawienie TXV lub poziom napełnienia.' });
-    } else if (sh > 20) {
-      items.push({ color: 'var(--red)', icon: '⚠', text: 'Bardzo wysokie przegrzanie — sprężarka może się przegrzewać. Sprawdź filtr osuszacz i drożność układu.' });
-    }
+    if (sh < 0)
+      items.push({ c: 'var(--red)', i: '!', t: 'SH ujemne — ciecz dociera do sprężarki! Zatrzymaj układ natychmiast.' });
+    else if (sh > 20)
+      items.push({ c: 'var(--red)', i: '⚠', t: 'Bardzo wysokie przegrzanie — sprężarka może się przegrzewać. Sprawdź filtr osuszacz i drożność układu.' });
   }
-
   if (sc !== null) {
-    if (sc < 0) items.push({ color: 'var(--red)', icon: '!', text: 'SC ujemne — czynnik w fazie parowej przed zaworem rozprężnym! Sprawdź chłodzenie skraplacza.' });
-    if (sc > 15) items.push({ color: 'var(--yellow)', icon: '!', text: 'Wysokie dochłodzenie — możliwa zwężka w przewodzie cieczowym (zatkany filtr osuszacz).' });
+    if (sc < 0)
+      items.push({ c: 'var(--red)', i: '!', t: 'SC ujemne — czynnik w fazie parowej przed zaworem rozprężnym! Sprawdź chłodzenie skraplacza.' });
+    if (sc > 15)
+      items.push({ c: 'var(--yellow)', i: '!', t: 'Wysokie dochłodzenie — możliwa zwężka w przewodzie cieczowym (zatkany filtr osuszacz).' });
   }
-
-  if (items.length === 0) {
-    if (sh !== null || sc !== null) {
-      items.push({ color: 'var(--text3)', icon: 'i', text: 'Wprowadź oba parametry (SH i SC) dla pełnej diagnozy.' });
-    }
-  }
+  if (items.length === 0)
+    items.push({ c: 'var(--text3)', i: 'i', t: 'Wprowadź oba parametry (SH i SC) dla pełnej diagnozy.' });
 
   list.innerHTML = items.map(function(it) {
-    return '<div class="diag-item" style="--diag-color:' + it.color + '">'
-      + '<span class="diag-icon">' + it.icon + '</span>'
-      + '<span class="diag-text">' + it.text + '</span>'
-      + '</div>';
+    return '<div class="diag-item" style="--diag-color:' + it.c + '"><span class="diag-icon">' + it.i + '</span><span class="diag-text">' + it.t + '</span></div>';
   }).join('');
 }
 
@@ -539,7 +776,24 @@ function resetAll() {
   calc();
 }
 
-// Init
+function openModal() {
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
 setValve('txv');
 </script>
 </body>
