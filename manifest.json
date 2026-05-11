@@ -2,7 +2,7 @@
   "name": "HVAC Kalkulator SH & SC",
   "short_name": "HVAC Kalk.",
   "description": "Kalkulator przegrzania i dochłodzenia dla R32 i R410A",
-  "start_url": "./hvac-kalkulator.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#0f172a",
